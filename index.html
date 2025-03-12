@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JiNi Belline</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        #question {
+            width: 300px;
+            height: 50px;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #cards {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-top: 20px;
+            visibility: hidden; /* 카드가 처음에 안 보이도록 */
+        }
+        img {
+            width: 150px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 0 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>JiNi Belline</h1>
+    <input type="text" id="question" placeholder="질문을 입력하세요 (선택사항)" />
+    <button onclick="drawCards()">카드 뽑기</button>
+    
+    <div id="cards">
+        <img id="card1" src="" alt="Card 1" />
+        <img id="card2" src="" alt="Card 2" />
+        <img id="card3" src="" alt="Card 3" />
+    </div>
+    
+    <footer>✨ 제작: 연유🌱</footer>
+
+    <script>
+        function drawCards() {
+            // 카드 파일 이름을 0~52까지 준비합니다.
+            let cardFiles = [];
+            for (let i = 0; i < 53; i++) {
+                cardFiles.push(i.toString().padStart(2, '0'));  // 확장자만 따로 설정
+            }
+
+            // 랜덤으로 3장의 카드 뽑기 (중복 없이)
+            let selectedCards = [];
+            while (selectedCards.length < 3) {
+                let randomIndex = Math.floor(Math.random() * cardFiles.length);
+                let selectedCard = cardFiles[randomIndex];
+
+                // 두 가지 확장자 중 하나로 파일 경로를 확인
+                let cardPathJPG = 'cards/' + selectedCard + '.JPG';
+                let cardPathJPGLower = 'cards/' + selectedCard + '.jpg';
+
+                // 파일이 존재하는 경로를 찾아 선택
+                if (!selectedCards.includes(cardPathJPG) && fileExists(cardPathJPG)) {
+                    selectedCards.push(cardPathJPG);
+                } else if (!selectedCards.includes(cardPathJPGLower) && fileExists(cardPathJPGLower)) {
+                    selectedCards.push(cardPathJPGLower);
+                }
+            }
+
+            // 선택된 카드 이미지를 보여주기
+            document.getElementById('card1').src = selectedCards[0];
+            document.getElementById('card2').src = selectedCards[1];
+            document.getElementById('card3').src = selectedCards[2];
+
+            // 카드들을 보이도록 변경
+            document.getElementById('cards').style.visibility = 'visible';
+
+            // 질문을 입력했다면 콘솔에 출력 (선택사항)
+            let question = document.getElementById('question').value;
+            if (question) {
+                console.log('질문: ' + question);
+            }
+        }
+
+        // 파일이 존재하는지 확인하는 함수 (실제로 파일이 있는지 확인하는 작업은 서버 측에서 처리해야 합니다)
+        function fileExists(filePath) {
+            // 이 함수는 실제 서버에서 파일 존재 여부를 확인하는 방식으로 구현되어야 합니다.
+            // 여기에서는 예시로 true를 반환하되, 실제 구현시에는 서버 측의 파일 존재 여부를 체크해야 합니다.
+            // 예를 들어, Ajax 요청을 통해 서버에서 확인하거나 Node.js 등의 서버 사이드에서 처리합니다.
+            return true;  // 현재는 단순히 모든 파일이 존재한다고 가정
+        }
+    </script>
+</body>
+</html>
